@@ -8,6 +8,7 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
   business_name text,
+  avatar_url text,
   currency text not null default 'IDR',
   timezone text not null default 'Asia/Jakarta',
   low_balance_threshold numeric(18,2) not null default 0,

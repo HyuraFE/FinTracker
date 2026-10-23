@@ -20,5 +20,6 @@ export const categorySchema = z.object({
 export const profileSchema = z.object({
   full_name: z.string().trim().max(120).optional(),
   business_name: z.string().trim().max(160).optional(),
+  avatar_url: z.string().url().nullable().optional(),
   low_balance_threshold: z.coerce.number().finite().nonnegative().nullable().optional(),
 });

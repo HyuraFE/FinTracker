@@ -10,7 +10,7 @@ export function DashboardHeader({
   profile,
 }: {
   categories: Category[];
-  profile?: { businessName?: string; email?: string } | null;
+  profile?: { businessName?: string; email?: string; avatarUrl?: string | null } | null;
 }) {
   return (
     <div className="space-y-4">
@@ -21,7 +21,11 @@ export function DashboardHeader({
         </div>
         <div className="flex items-center gap-3">
           <TransactionForm categories={categories} />
-          <ProfileMenu businessName={profile?.businessName} userName={profile?.email} />
+          <ProfileMenu
+            businessName={profile?.businessName}
+            userName={profile?.email}
+            avatarUrl={profile?.avatarUrl}
+          />
         </div>
       </div>
       <PeriodFilter />

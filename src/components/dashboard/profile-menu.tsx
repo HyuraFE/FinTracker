@@ -3,7 +3,15 @@ import { useState, useRef, useEffect } from 'react';
 import { signOut } from '@/app/actions/auth';
 import { User, LogOut, Settings, Building2 } from 'lucide-react';
 
-export function ProfileMenu({ userName, businessName }: { userName?: string; businessName?: string }) {
+export function ProfileMenu({
+  userName,
+  businessName,
+  avatarUrl,
+}: {
+  userName?: string;
+  businessName?: string;
+  avatarUrl?: string | null;
+}) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -28,8 +36,12 @@ export function ProfileMenu({ userName, businessName }: { userName?: string; bus
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-semibold text-sm">
-          {businessName?.[0]?.toUpperCase() || userName?.[0]?.toUpperCase() || 'U'}
+        <div className="w-8 h-8 rounded-full border border-emerald-500/20 bg-emerald-100 flex items-center justify-center text-emerald-600 font-semibold text-sm overflow-hidden shrink-0">
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+          ) : (
+            businessName?.[0]?.toUpperCase() || userName?.[0]?.toUpperCase() || 'U'
+          )}
         </div>
         <div className="hidden sm:block text-left">
           <p className="text-xs font-medium text-slate-800">{businessName || 'Usaha'}</p>

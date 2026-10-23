@@ -33,12 +33,13 @@ export default async function DashboardPage({
   const [result, categories, profileResult] = await Promise.all([
     getTransactions(filters),
     getCategories(),
-    user ? supabase.from('profiles').select('business_name, full_name').eq('id', user.id).single() : Promise.resolve({ data: null }),
+    user ? supabase.from('profiles').select('business_name, full_name, avatar_url').eq('id', user.id).single() : Promise.resolve({ data: null }),
   ]);
 
   const profile = {
     businessName: profileResult.data?.business_name || user?.user_metadata?.business_name || 'Usaha Saya',
     email: user?.email || '',
+    avatarUrl: profileResult.data?.avatar_url || null,
   };
 
   const transactions = (result.data || []).map((t: any) => ({
