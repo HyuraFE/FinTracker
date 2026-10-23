@@ -1,0 +1,3 @@
+import { describe, it, expect } from 'vitest';
+import { calculateBalance, groupExpensesByCategory } from '@/lib/financial';
+describe('Dashboard Data Pipeline', () => { it('produces valid KPI and chart data structure', () => { const mockData = [{id:'1',date:'2026-10-01',amount:5000000,type:'income' as const,categoryName:'Klien A'},{id:'2',date:'2026-10-02',amount:1500000,type:'expense' as const,categoryName:'Hosting'}]; const kpi=calculateBalance(mockData); const expenses=groupExpensesByCategory(mockData); expect(kpi.netProfit).toBe(3500000); expect(expenses[0].categoryName).toBe('Hosting'); expect(expenses[0].total).toBe(1500000); }); });

@@ -1,0 +1,4 @@
+'use client';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { formatIDR } from '@/lib/financial';
+export function CashflowChart({ data }: { data: { month: string; income: number; expense: number }[] }) { return <div className="bg-white rounded-xl border p-5 shadow-sm"><h2 className="font-semibold mb-4">Arus Kas Bulanan</h2><div className="h-64"><ResponsiveContainer width="100%" height="100%"><BarChart data={data}><XAxis dataKey="month" fontSize={12} /><YAxis fontSize={12} tickFormatter={v => `${v / 1000000}jt`} /><Tooltip formatter={(v: number) => formatIDR(v)} /><Legend /><Bar dataKey="income" name="Pemasukan" fill="#059669" radius={[4,4,0,0]} /><Bar dataKey="expense" name="Pengeluaran" fill="#dc2626" radius={[4,4,0,0]} /></BarChart></ResponsiveContainer></div></div>; }
