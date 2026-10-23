@@ -54,7 +54,7 @@ export function TransactionForm({ categories, initialData, onClose }: {
           </div>
           <div>
             <label className="block text-xs font-semibold mb-1">Nominal (Rp)</label>
-            <input name="amount" type="number" min="1" step="1000" defaultValue={initialData?.amount || ''} required className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Contoh: 50000" />
+            <input name="amount" type="number" min="1" step="any" defaultValue={initialData?.amount || ''} required className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Contoh: 10000" />
           </div>
           <div>
             <label className="block text-xs font-semibold mb-1">Kategori</label>
