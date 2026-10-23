@@ -37,3 +37,4 @@ next-env.d.ts
 # superpowers / scratch
 .superpowers/
 .progress.md
+.impeccable/

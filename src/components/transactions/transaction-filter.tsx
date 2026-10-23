@@ -4,25 +4,33 @@ import { useState, useEffect } from 'react';
 
 interface Category { id: string; name: string; type: string; }
 
+const MONTHS = [
+  { value: '1', label: 'Januari' }, { value: '2', label: 'Februari' }, { value: '3', label: 'Maret' },
+  { value: '4', label: 'April' }, { value: '5', label: 'Mei' }, { value: '6', label: 'Juni' },
+  { value: '7', label: 'Juli' }, { value: '8', label: 'Agustus' }, { value: '9', label: 'September' },
+  { value: '10', label: 'Oktober' }, { value: '11', label: 'November' }, { value: '12', label: 'Desember' },
+];
+
 export function TransactionFilter({ initialFilters, categories }: { initialFilters: Record<string, any>; categories: Category[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [startDate, setStartDate] = useState(initialFilters.startDate || '');
-  const [endDate, setEndDate] = useState(initialFilters.endDate || '');
+
+  const [month, setMonth] = useState(initialFilters.month || new Date().getMonth() + 1 + '');
+  const [year, setYear] = useState(initialFilters.year || new Date().getFullYear() + '');
   const [type, setType] = useState<'income' | 'expense' | ''>(initialFilters.type || '');
   const [category_id, setCategoryId] = useState(initialFilters.category_id || '');
 
   useEffect(() => {
-    setStartDate(initialFilters.startDate || '');
-    setEndDate(initialFilters.endDate || '');
+    setMonth(initialFilters.month || '');
+    setYear(initialFilters.year || '');
     setType(initialFilters.type || '');
     setCategoryId(initialFilters.category_id || '');
   }, [initialFilters]);
 
   function applyFilters() {
     const params = new URLSearchParams();
-    if (startDate) params.set('startDate', startDate);
-    if (endDate) params.set('endDate', endDate);
+    if (month) params.set('month', month);
+    if (year) params.set('year', year);
     if (type) params.set('type', type);
     if (category_id) params.set('category_id', category_id);
     params.set('page', '1');
@@ -33,18 +41,23 @@ export function TransactionFilter({ initialFilters, categories }: { initialFilte
     router.push('/transactions');
   }
 
+  const years = Array.from({ length: 5 }, (_, i) => (new Date().getFullYear() - 2 + i) + '');
   const filteredCats = categories.filter(c => !type || c.type === type);
 
   return (
     <div className="p-4 bg-white rounded-xl border shadow-sm space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
-          <label className="block text-xs font-semibold mb-1">Dari Tanggal</label>
-          <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+          <label className="block text-xs font-semibold mb-1">Bulan</label>
+          <select value={month} onChange={e => setMonth(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+            {MONTHS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+          </select>
         </div>
         <div>
-          <label className="block text-xs font-semibold mb-1">Sampai Tanggal</label>
-          <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+          <label className="block text-xs font-semibold mb-1">Tahun</label>
+          <select value={year} onChange={e => setYear(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+            {years.map(y => <option key={y} value={y}>{y}</option>)}
+          </select>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1">Tipe</label>

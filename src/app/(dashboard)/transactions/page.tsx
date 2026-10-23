@@ -12,7 +12,12 @@ export default async function TransactionsPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const params = await searchParams;
+  const currentMonth = new Date().getMonth() + 1 + '';
+  const currentYear = new Date().getFullYear() + '';
+
   const filters: TransactionFilters = {
+    month: params?.month || currentMonth,
+    year: params?.year || currentYear,
     startDate: params?.startDate,
     endDate: params?.endDate,
     type: params?.type as 'income' | 'expense' | undefined,

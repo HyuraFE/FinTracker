@@ -5,6 +5,8 @@ import { transactionSchema } from '@/lib/validations/finance';
 import { revalidatePath } from 'next/cache';
 
 export interface TransactionFilters {
+  month?: string;
+  year?: string;
   startDate?: string;
   endDate?: string;
   type?: 'income' | 'expense';
@@ -25,6 +27,15 @@ export async function getTransactions(filters: TransactionFilters = {}) {
     .order('date', { ascending: false })
     .order('created_at', { ascending: false });
 
+  if (filters.year && filters.month) {
+    const startDate = `${filters.year}-${filters.month.padStart(2, '0')}-01`;
+    const endDate = new Date(Number(filters.year), Number(filters.month), 0).toISOString().split('T')[0];
+    query = query.gte('date', startDate).lte('date', endDate);
+  } else if (filters.year) {
+    const startDate = `${filters.year}-01-01`;
+    const endDate = `${filters.year}-12-31`;
+    query = query.gte('date', startDate).lte('date', endDate);
+  }
   if (filters.startDate) query = query.gte('date', filters.startDate);
   if (filters.endDate) query = query.lte('date', filters.endDate);
   if (filters.type) query = query.eq('type', filters.type);
