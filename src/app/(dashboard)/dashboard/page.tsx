@@ -1,5 +1,6 @@
 import { getTransactions, TransactionFilters } from '@/app/actions/transactions';
 import { getCategories } from '@/app/actions/categories';
+import { createServerClient } from '@/lib/supabase/server';
 import { calculateBalance, formatIDR, groupExpensesByCategory, groupTransactionsByMonth } from '@/lib/financial';
 import { KpiCard } from '@/components/dashboard/kpi-card';
 import { CashflowChart } from '@/components/dashboard/cashflow-chart';
@@ -26,10 +27,19 @@ export default async function DashboardPage({
     limit: 10000,
   };
 
-  const [result, categories] = await Promise.all([
+  const supabase = createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const [result, categories, profileResult] = await Promise.all([
     getTransactions(filters),
     getCategories(),
+    user ? supabase.from('profiles').select('business_name, full_name').eq('id', user.id).single() : Promise.resolve({ data: null }),
   ]);
+
+  const profile = {
+    businessName: profileResult.data?.business_name || user?.user_metadata?.business_name || 'Usaha Saya',
+    email: user?.email || '',
+  };
 
   const transactions = (result.data || []).map((t: any) => ({
     id: t.id,
@@ -47,7 +57,7 @@ export default async function DashboardPage({
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <DashboardHeader categories={categories || []} />
+      <DashboardHeader categories={categories || []} profile={profile} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard

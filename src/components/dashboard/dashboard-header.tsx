@@ -1,10 +1,17 @@
 'use client';
 import { TransactionForm } from '@/components/transactions/transaction-form';
 import { PeriodFilter } from '@/components/dashboard/period-filter';
+import { ProfileMenu } from '@/components/dashboard/profile-menu';
 
 interface Category { id: string; name: string; type: 'income' | 'expense'; color?: string; }
 
-export function DashboardHeader({ categories }: { categories: Category[] }) {
+export function DashboardHeader({
+  categories,
+  profile,
+}: {
+  categories: Category[];
+  profile?: { businessName?: string; email?: string } | null;
+}) {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -14,6 +21,7 @@ export function DashboardHeader({ categories }: { categories: Category[] }) {
         </div>
         <div className="flex items-center gap-3">
           <TransactionForm categories={categories} />
+          <ProfileMenu businessName={profile?.businessName} userName={profile?.email} />
         </div>
       </div>
       <PeriodFilter />
